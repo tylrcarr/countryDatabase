@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	//	"flag"
 	"log"
 	"net/http"
 
@@ -68,7 +69,12 @@ func init() {
 }
 
 func main() {
+	//var site string
+
+	//flag.StringVar(&site, "dir", ".", "site")
+	//flag.Parse()
 	r := mux.NewRouter()
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("site")))
 	r.HandleFunc("/country", AllCountries).Methods("GET")
 	r.HandleFunc("/country", CreateCountry).Methods("POST")
 	r.HandleFunc("/country/{id}", FindCountry).Methods("GET")
