@@ -10,14 +10,14 @@ import (
 )
 
 type CountriesDb struct {
-	Server		string
-	Database	string
+	Server   string
+	Database string
 }
 
 var db *mgo.Database
 
 const (
-	COLLECTION = "countries"
+	COLLECTION = "data"
 )
 
 func (m *CountriesDb) Connect() {
@@ -34,9 +34,9 @@ func (m *CountriesDb) FindAll() ([]Country, error) {
 	return countries, err
 }
 
-func (m *CountriesDb) FindById(id string) (Country, error) {
+func (m *CountriesDb) FindByName(name string) (Country, error) {
 	var country Country
-	err := db.C(COLLECTION).FindId(bson.ObjectIdHex(id)).One(&country)
+	err := db.C(COLLECTION).Find(bson.M{"name": name}).One(&country)
 	return country, err
 }
 
