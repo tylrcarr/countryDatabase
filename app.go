@@ -1,15 +1,15 @@
 package main
 
 import (
+	"fmt"
 	"encoding/json"
-	//	"flag"
 	"log"
 	"net/http"
 
 	"gopkg.in/mgo.v2/bson"
 
 	"github.com/gorilla/mux"
-	. "github.com/tylrcarr/countryDatabase/config"
+	. "github.com/tylrcarr/countryDatabase/config" 
 	. "github.com/tylrcarr/countryDatabase/dao"
 	. "github.com/tylrcarr/countryDatabase/models"
 )
@@ -30,6 +30,7 @@ func AllCountries(w http.ResponseWriter, r *http.Request) {
 }
 
 func FindCountry(w http.ResponseWriter, r *http.Request) {
+	fmt.Println("test")
 	params := mux.Vars(r)
 	country, err := dao.FindByName(params["id"])
 	if err != nil {
@@ -69,15 +70,11 @@ func init() {
 }
 
 func main() {
-	//var site string
-
-	//flag.StringVar(&site, "dir", ".", "site")
-	//flag.Parse()
 	r := mux.NewRouter()
-	r.PathPrefix("/").Handler(http.FileServer(http.Dir("site")))
 	r.HandleFunc("/country", AllCountries).Methods("GET")
 	r.HandleFunc("/country", CreateCountry).Methods("POST")
 	r.HandleFunc("/country/{id}", FindCountry).Methods("GET")
+	r.PathPrefix("/").Handler(http.FileServer(http.Dir("site")))
 	if err := http.ListenAndServe(":3000", r); err != nil {
 		log.Fatal(err)
 	}
