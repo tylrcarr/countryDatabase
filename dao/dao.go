@@ -50,7 +50,3 @@ func (m *CountriesDb) Delete(country Country) error {
 	return err
 }
 
-func (m *CountriesDb) Update(country Country) error {
-	err := db.C(COLLECTION).UpdateId(country.ID, &country)
-	return err
-}

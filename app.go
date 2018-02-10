@@ -1,17 +1,14 @@
 package main
 
 import (
-	"fmt"
 	"encoding/json"
 	"log"
 	"net/http"
 
-	"gopkg.in/mgo.v2/bson"
 
 	"github.com/gorilla/mux"
-	. "github.com/tylrcarr/countryDatabase/config" 
+	. "github.com/tylrcarr/countryDatabase/config"
 	. "github.com/tylrcarr/countryDatabase/dao"
-	. "github.com/tylrcarr/countryDatabase/models"
 )
 
 var dao = CountriesDb{}
@@ -30,30 +27,10 @@ func AllCountries(w http.ResponseWriter, r *http.Request) {
 }
 
 func FindCountry(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("test")
 	params := mux.Vars(r)
 	country, err := dao.FindByName(params["id"])
 	if err != nil {
 		http.Error(w, "Invalid Country", 400)
-		return
-	}
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(http.StatusCreated)
-	json.NewEncoder(w).Encode(country)
-}
-
-func CreateCountry(w http.ResponseWriter, r *http.Request) {
-	defer r.Body.Close()
-	var country Country
-	if err := json.NewDecoder(r.Body).Decode(&country); err != nil {
-		http.Error(w, "Bad Request", 400)
-		//respondWithError(w, http.StatusBadRequest, "Invalid request payload")
-		return
-	}
-	country.ID = bson.NewObjectId()
-	if err := dao.Insert(country); err != nil {
-		http.Error(w, err.Error(), 500)
-		//respondWithError(w, http.StatusInternalServerError, err.Error())
 		return
 	}
 	w.Header().Set("Content-Type", "application/json")
@@ -72,7 +49,6 @@ func init() {
 func main() {
 	r := mux.NewRouter()
 	r.HandleFunc("/country", AllCountries).Methods("GET")
-	r.HandleFunc("/country", CreateCountry).Methods("POST")
 	r.HandleFunc("/country/{id}", FindCountry).Methods("GET")
 	r.PathPrefix("/").Handler(http.FileServer(http.Dir("site")))
 	if err := http.ListenAndServe(":3000", r); err != nil {
