@@ -4,27 +4,17 @@ import (
 //	"encoding/json"
 //	"gopkg.in/mgo.v2/bson"
 )
-type Properties struct {
-	Name	string		`bson:"name" json:"name"`
-}
-type Polygon struct {
-	Lines [][][]float64	`bson:"" json:""`
-}
-type Geometry struct {
-	Coordinates	[][][]float64	`bson:"coordinates" json:"coordinates"`
-	Type		string		`bson:"type" json:"type"`
-}
-type GeoJson struct {
-	Geometry	Geometry	`bson:"geometry" json:"geometry"`
-	Properties	Properties	`bson:"properties" json:"properties"`
-	Type		string		`bson:"type" json:"type"`
-}
+// for getting a specified country
 type Country struct {
-//	ID	string		`bson:"name" json:"name"`
-	Name	string		`bson:"name" json:"name"`
-	LatLng	[]float32	`bson:"latlng" json:"latlng"`
-	Flag	string		`bson:"flag" json:"flag"`
-	Alpha3	string		`bson:"alpha3Code" json:"alpha3"`
-	GeoJson	GeoJson		`bson:"geojson" json:"geojson"`
+	Name		string		`bson:"name" json:"name"`
+	LatLng		[]float64	`bson:"latlng" json:"latlng"`
+	Flag		string		`bson:"flag" json:"flag"`
+	Alpha3		string		`bson:"alpha3Code" json:"alpha3"`
+	Population	int64		`bson:"population" json:"population"`
+	Area		int64		`bson:"area" json:"area"`
+}
+//for autocomplete of country
+type Names struct {
+	Names		[]string	`bson:"names" json:"names"`
 
 }

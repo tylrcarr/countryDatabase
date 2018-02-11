@@ -18,6 +18,7 @@ var db *mgo.Database
 
 const (
 	COLLECTION = "data"
+	NAMES = "names"
 )
 
 func (m *CountriesDb) Connect() {
@@ -34,10 +35,16 @@ func (m *CountriesDb) FindAll() ([]Country, error) {
 	return countries, err
 }
 
-func (m *CountriesDb) FindByName(name string) (Country, error) {
+func (m *CountriesDb) FindByCode(code string) (Country, error) {
 	var country Country
-	err := db.C(COLLECTION).Find(bson.M{"name": name}).One(&country)
+	err := db.C(COLLECTION).Find(bson.M{"alpha3Code": code}).One(&country)
 	return country, err
+}
+
+func (m *CountriesDb) GetNames() (Names, error) {
+	var names Names
+	err := db.C(NAMES).Find(bson.M{}).One(&names)
+	return names, err
 }
 
 func (m *CountriesDb) Insert(country Country) error {
